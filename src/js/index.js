@@ -20,7 +20,6 @@ function writeNumber (value) {
 function writeOperator (value) {
   validateNumberAndPush()
   operations.push(value.trim())
-
   writeInCalculator(value)
 }
 
@@ -34,6 +33,7 @@ function clearDisplay () {
   displayShown.splice(0, displayShown.length)
   operations.splice(0, operations.length)
   numbers.splice(0, numbers.length)
+  temporaryNumber = ''
 
   display.innerText = '0'
 }
@@ -88,4 +88,14 @@ function execute () {
   displayShown[0] = result
 
   display.innerText = result
+}
+
+module.exports = {
+  validateNumberAndPush,
+  writeNumber,
+  writeOperator,
+  writeInCalculator,
+  clearDisplay,
+  calculate,
+  execute
 }

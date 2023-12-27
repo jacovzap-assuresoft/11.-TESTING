@@ -1,63 +1,75 @@
-import valida from "../js/index.js"
-
 describe('Calculator functions', () => {
-  let temporaryNumber = ''
-  let displayShown = []
-  let operations = []
-  let numbers = []
+  let display
+  let calculator
 
-  beforeEach(() => {
-    temporaryNumber = ''
-    displayShown = []
-    operations = []
-    numbers = []
+  beforeAll(() => {
+    document.body.innerHTML = `<div id="display">0</div>`
+    display = document.getElementById('display')
+    calculator = require('../js/index.js')
   })
 
-  test('validateNumberAndPush', () => {
-    temporaryNumber = '5'
-    validateNumberAndPush()
-    expect(numbers).toEqual(['5'])
+  afterEach(() => {
+    calculator.clearDisplay()
   })
 
   test('writeNumber', () => {
-    writeNumber('3')
-    expect(temporaryNumber).toBe('3')
-    expect(displayShown).toEqual(['3'])
+    calculator.writeNumber('3')
+    expect(display.innerText).toEqual('3')
   })
 
   test('writeOperator', () => {
-    writeOperator('+')
-    expect(operations).toEqual(['+'])
-    expect(displayShown).toEqual(['+'])
+    calculator.writeOperator('+')
+    expect(display.innerText).toEqual('+')
   })
 
   test('writeInCalculator', () => {
-    writeInCalculator('7')
-    expect(displayShown).toEqual(['7'])
+    calculator.writeInCalculator('7')
+    expect(display.innerText).toEqual('7')
   })
 
   test('clearDisplay', () => {
-    writeNumber('3')
-    writeOperator('+')
-    writeNumber('2')
-    clearDisplay()
-    expect(displayShown).toEqual([])
-    expect(operations).toEqual([])
-    expect(numbers).toEqual([])
+    calculator.writeNumber('3')
+    calculator.writeOperator('+')
+    calculator.writeNumber('2')
+    calculator.clearDisplay()
+    expect(display.innerText).toEqual('0')
   })
 
   test('calculate', () => {
-    numbers = ['3', '2']
-    operations = ['+']
-    const result = calculate(operations, numbers)
-    expect(result).toBe(5)
+    let numbers = []
+    let operations = []
+
+    numbers.push('2')
+    numbers.push('2')
+    numbers.push('2')
+    numbers.push('5')
+    numbers.push('4')
+
+    operations.push('×')
+    operations.push('÷')
+    operations.push('+')
+    operations.push('-')
+
+    expect(calculator.calculate(operations, numbers)).toEqual(3)
+  })
+
+  test('invalid operation', () => { 
+    let numbers = []
+    let operations = []
+
+    numbers.push('2')
+    numbers.push('2')
+
+    operations.push('^')
+
+    expect(calculator.calculate(operations, numbers)).toEqual(0)
   })
 
   test('execute', () => {
-    writeNumber('3')
-    writeOperator('+')
-    writeNumber('2')
-    execute()
-    expect(displayShown).toEqual([5])
+    calculator.writeNumber('3')
+    calculator.writeOperator('+')
+    calculator.writeNumber('2')
+    calculator.execute()
+    expect(display.innerText).toEqual(5)
   })
 })
